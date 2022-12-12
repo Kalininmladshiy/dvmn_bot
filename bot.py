@@ -49,5 +49,8 @@ if __name__ == '__main__':
             print('Произошел разрыв сетевого соединения. Ожидаем 10 секунд.')
             time.sleep(10)
             continue
-        timestamp = task['last_attempt_timestamp']
+        try:
+            timestamp = task['last_attempt_timestamp']
+        except KeyError:
+            timestamp = task['timestamp_to_request']
         payload = {"timestamp": timestamp}
