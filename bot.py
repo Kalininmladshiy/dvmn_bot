@@ -25,14 +25,15 @@ if __name__ == '__main__':
                 timeout=5,
              )
             response.raise_for_status()
-            if response.json()['status'] == 'found':
-                lesson_title = response.json()['new_attempts'][0]['lesson_title']
+            task = response.json()
+            if task['status'] == 'found':
+                lesson_title = task['new_attempts'][0]['lesson_title']
                 bot.send_message(
                     chat_id=tg_chat_id,
                     text=f"Преподаватель проверил работу '{lesson_title}'!",
                  )
-                if response.json()['new_attempts'][0]['is_negative']:
-                    lesson_url = response.json()['new_attempts'][0]['lesson_url']
+                if task['new_attempts'][0]['is_negative']:
+                    lesson_url = task['new_attempts'][0]['lesson_url']
                     bot.send_message(
                         chat_id=tg_chat_id,
                         text=f"К сожалению в работе'{lesson_url}' нашлись ошибки!",
@@ -48,5 +49,5 @@ if __name__ == '__main__':
             print('Произошел разрыв сетевого соединения. Ожидаем 10 секунд.')
             time.sleep(10)
             continue
-        timestamp = response.json()['last_attempt_timestamp']
+        timestamp = task['last_attempt_timestamp']
         payload = {"timestamp": timestamp}
