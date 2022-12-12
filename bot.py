@@ -9,7 +9,7 @@ if __name__ == '__main__':
     load_dotenv()
     dvmn_token = os.getenv("DVMN_TOKEN")
     tg_token = os.getenv("TG_BOT_TOKEN")
-    chat_id = os.getenv("CHAT_ID")
+    tg_chat_id = os.getenv("TG_CHAT_ID")
     bot = telegram.Bot(token=tg_token)
     url = 'https://dvmn.org/api/long_polling/'
     headers = {
@@ -28,18 +28,18 @@ if __name__ == '__main__':
             if response.json()['status'] == 'found':
                 lesson_title = response.json()['new_attempts'][0]['lesson_title']
                 bot.send_message(
-                    chat_id=chat_id,
+                    chat_id=tg_chat_id,
                     text=f"Преподаватель проверил работу '{lesson_title}'!",
                  )
                 if response.json()['new_attempts'][0]['is_negative']:
                     lesson_url = response.json()['new_attempts'][0]['lesson_url']
                     bot.send_message(
-                        chat_id=chat_id,
+                        chat_id=tg_chat_id,
                         text=f"К сожалению в работе'{lesson_url}' нашлись ошибки!",
                      )
                 else:
                     bot.send_message(
-                        chat_id=chat_id,
+                        chat_id=tg_chat_id,
                         text="Преподавателю все понравилось!",
                      )
         except requests.exceptions.ReadTimeout:
