@@ -27,6 +27,7 @@ if __name__ == '__main__':
             response.raise_for_status()
             task = response.json()
             if task['status'] == 'found':
+                timestamp = task['last_attempt_timestamp']
                 lesson_title = task['new_attempts'][0]['lesson_title']
                 bot.send_message(
                     chat_id=tg_chat_id,
@@ -43,14 +44,12 @@ if __name__ == '__main__':
                         chat_id=tg_chat_id,
                         text="Преподавателю все понравилось!",
                      )
+            else:
+                timestamp = task['timestamp_to_request']
         except requests.exceptions.ReadTimeout:
             continue
         except requests.exceptions.ConnectionError:
             print('Произошел разрыв сетевого соединения. Ожидаем 10 секунд.')
             time.sleep(10)
             continue
-        try:
-            timestamp = task['last_attempt_timestamp']
-        except KeyError:
-            timestamp = task['timestamp_to_request']
         payload = {"timestamp": timestamp}
