@@ -5,6 +5,8 @@ import time
 import logging
 from dotenv import load_dotenv
 
+logger = logging.getLogger('dvmn_bot')
+
 
 class TelegramLogsHandler(logging.Handler):
 
@@ -27,7 +29,6 @@ if __name__ == '__main__':
 
     bot = telegram.Bot(token=tg_token)
     
-    logger = logging.getLogger('dvmn_bot')
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter(
         "%(process)d %(levelname)s %(filename)s %(lineno)d %(asctime)s %(message)s"
